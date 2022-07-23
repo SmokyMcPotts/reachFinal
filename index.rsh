@@ -38,18 +38,18 @@ export const main = Reach.App(() => {
   const rightAnswer = (handAlice + handBob);
   const winner = () => {
     if ( guessAlice == guessBob ) {
-      return 2;
+      return 1;
     } else {
       if ( guessAlice == rightAnswer ) {
         return 0;
       } else if ( guessBob == rightAnswer ) {
-        return 1;
-      } else {
         return 2;
+      } else {
+        return 1;
       };
     };
     each([A, B], () => {
-      interact.seeWinner(winner());
+      nteract.seeWinner(winner);
     });
   };
 
