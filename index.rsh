@@ -12,30 +12,32 @@ const commonInteract = {
 export const main = Reach.App(() => {
   const A = Participant('Alice', { 
     ...commonInteract,
-    wager: UInt,
-    deadline: UInt,
-    // Specify Alice's interact interface here
+    wager: UInt, //should come over in atomic units
+    deadline: UInt, //hardcoded, number depends on connector only
+    // Additional Alice interact interface here
   });
   const B = Participant('Bob', {
     ...commonInteract,
     acceptWager: Fun([UInt], Null),
-    // Specify Bob's interact interface here
+    // Additional Bob interact interface here
   });
   init();
 
+  // will not ever be triggered in devnet, unnless I do it artificially
   const informTimeout = () => {
     each([A, B], () => {
       interact.informTimeout();
     });
   };
   
-  // The first one to publish deploys the contract
+  // The first one to publish (Alice) deploys the contract
   A.only(() => {
     const wager = declassify(interact.wager);
     const deadline = declassify(interact.deadline);
   });
+  //publish wager and deadline; pay wager to contract
   A.publish(wager, deadline)
-    .pay(wager);
+    .pay(wager);//error is occurring here
   commit();
 
   B.only(() => {
@@ -44,6 +46,9 @@ export const main = Reach.App(() => {
   B.pay(wager)
     .timeout(relativeTime(deadline), () => closeTo(A, informTimeout));
   
+  //while loop disabled until I can get it to work one time; 
+  //reinstall once program makes one complete pass
+
   //var winner = 1;
   //invariant( balance() == 2 * wager );
   //while ( winner == 1 ) {
