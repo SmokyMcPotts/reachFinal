@@ -1,3 +1,4 @@
 # reachFinal
 
-skipping if/else statement on lines 37-47 of .mjs
+Morra without the GUI.
+I really like this one better
